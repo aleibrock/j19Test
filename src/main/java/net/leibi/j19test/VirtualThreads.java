@@ -44,6 +44,7 @@ class ThreadDemo extends Thread {
     System.out.println("Creating " + threadName);
   }
 
+  @Override
   public void run() {
     System.out.println("Running " + threadName);
     try {
@@ -58,6 +59,7 @@ class ThreadDemo extends Thread {
     System.out.println("Thread " + threadName + " exiting.");
   }
 
+  @Override
   public void start() {
     System.out.println("Starting " + threadName);
     if (t == null) {
@@ -72,7 +74,7 @@ public class VirtualThreads {
 
   public static final int THREADS = 10_000;
 
-  public static void runnables() {
+  public static void runnablesTest() {
 
     for (int i = 0; i < THREADS; i++) {
       RunnableDemo R1 = new RunnableDemo("Runnable-" + i);
@@ -80,7 +82,7 @@ public class VirtualThreads {
     }
   }
 
-  public static void threads() {
+  public static void threadsTest() {
 
     for (int i = 0; i < THREADS; i++) {
       ThreadDemo R1 = new ThreadDemo("Thread-" + i);
@@ -88,7 +90,7 @@ public class VirtualThreads {
     }
   }
 
-  public static void virtual() {
+  public static void virtualThreadsTest() {
     for (int i = 0; i < THREADS; i++) {
       Thread.ofVirtual().start(new RunnableDemo("VirtualRunnable" + i));
     }

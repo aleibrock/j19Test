@@ -2,6 +2,9 @@ package net.leibi.j19test;
 
 import static java.lang.System.nanoTime;
 
+import lombok.extern.slf4j.Slf4j;
+
+@Slf4j
 public class J19TestApplication {
 
   private static final int MILLISECONDS_PER_SECOND = 1000;
@@ -10,19 +13,19 @@ public class J19TestApplication {
   public static void main(String[] args) throws InterruptedException {
 
     long start = nanoTime();
-    VirtualThreads.runnables();
+    VirtualThreads.runnablesTest();
     long runnables = nanoTime();
-    VirtualThreads.threads();
+    VirtualThreads.threadsTest();
     long threads = nanoTime();
-    VirtualThreads.virtual();
+    VirtualThreads.virtualThreadsTest();
     long virtualthreads = nanoTime();
 
     Thread.sleep(1000);
 
-    System.out.println(String.format("Total time: %d", millisecondsBetween(start, virtualthreads)));
-    System.out.println(String.format("Runnables time: %d", millisecondsBetween(start,runnables)));
-    System.out.println(String.format("Threads time: %d", millisecondsBetween(runnables, threads)));
-    System.out.println(String.format("VThreads time: %d", millisecondsBetween(threads,virtualthreads)));
+    log.info("Total time: {}", millisecondsBetween(start, virtualthreads));
+    log.info("Runnables time: {}", millisecondsBetween(start,runnables));
+    log.info("Threads time: {}", millisecondsBetween(runnables, threads));
+    log.info("VThreads time: {}", millisecondsBetween(threads,virtualthreads));
   }
 
   static long millisecondsBetween(long start, long end) {
