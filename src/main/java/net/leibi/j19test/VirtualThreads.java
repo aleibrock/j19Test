@@ -1,5 +1,11 @@
 package net.leibi.j19test;
 
+import lombok.AccessLevel;
+import lombok.NoArgsConstructor;
+import lombok.extern.slf4j.Slf4j;
+import org.slf4j.Logger;
+
+@Slf4j
 class RunnableDemo implements Runnable {
 
   private final String threadName;
@@ -7,25 +13,29 @@ class RunnableDemo implements Runnable {
 
   RunnableDemo(String name) {
     threadName = name;
-    System.out.println("Creating " + threadName);
+    log.info("Creating " + threadName);
   }
 
   public void run() {
-    System.out.println("Running " + threadName);
+    running(log, threadName);
+  }
+
+  static void running(Logger log, String threadName) {
+    log.info("Running " + threadName);
     try {
       for (int i = 4; i > 0; i--) {
-        System.out.println("Thread: " + threadName + ", " + i);
+        log.info("Thread: " + threadName + ", " + i);
         // Let the thread sleep for a while.
         Thread.sleep(50);
       }
     } catch (InterruptedException e) {
-      System.out.println("Thread " + threadName + " interrupted.");
+      log.info("Thread " + threadName + " interrupted.");
     }
-    System.out.println("Thread " + threadName + " exiting.");
+    log.info("Thread " + threadName + " exiting.");
   }
 
   public void start() {
-    System.out.println("Starting " + threadName);
+    log.info("Starting " + threadName);
     if (t == null) {
       t = new Thread(this, threadName);
       t.start();
@@ -34,6 +44,7 @@ class RunnableDemo implements Runnable {
 }
 
 
+@Slf4j
 class ThreadDemo extends Thread {
 
   private Thread t;
@@ -41,27 +52,17 @@ class ThreadDemo extends Thread {
 
   ThreadDemo(String name) {
     threadName = name;
-    System.out.println("Creating " + threadName);
+    log.info("Creating " + threadName);
   }
 
   @Override
   public void run() {
-    System.out.println("Running " + threadName);
-    try {
-      for (int i = 4; i > 0; i--) {
-        System.out.println("Thread: " + threadName + ", " + i);
-        // Let the thread sleep for a while.
-        Thread.sleep(50);
-      }
-    } catch (InterruptedException e) {
-      System.out.println("Thread " + threadName + " interrupted.");
-    }
-    System.out.println("Thread " + threadName + " exiting.");
+    RunnableDemo.running(log, threadName);
   }
 
   @Override
   public void start() {
-    System.out.println("Starting " + threadName);
+    log.info("Starting " + threadName);
     if (t == null) {
       t = new Thread(this, threadName);
       t.start();
@@ -70,6 +71,7 @@ class ThreadDemo extends Thread {
 }
 
 
+@NoArgsConstructor(access = AccessLevel.PRIVATE)
 public class VirtualThreads {
 
   public static final int THREADS = 10_000;
@@ -77,16 +79,16 @@ public class VirtualThreads {
   public static void runnablesTest() {
 
     for (int i = 0; i < THREADS; i++) {
-      RunnableDemo R1 = new RunnableDemo("Runnable-" + i);
-      R1.start();
+      RunnableDemo r1 = new RunnableDemo("Runnable-" + i);
+      r1.start();
     }
   }
 
   public static void threadsTest() {
 
     for (int i = 0; i < THREADS; i++) {
-      ThreadDemo R1 = new ThreadDemo("Thread-" + i);
-      R1.start();
+      ThreadDemo r1 = new ThreadDemo("Thread-" + i);
+      r1.start();
     }
   }
 
