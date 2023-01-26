@@ -1,5 +1,10 @@
 package net.leibi.j19test;
 
+import java.io.IOException;
+import java.net.URL;
+import java.nio.charset.StandardCharsets;
+import java.util.concurrent.ExecutionException;
+import java.util.concurrent.Executors;
 import lombok.AccessLevel;
 import lombok.NoArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
@@ -71,7 +76,7 @@ class ThreadDemo extends Thread {
 }
 
 
-@NoArgsConstructor(access = AccessLevel.PRIVATE)
+@Slf4j
 public class VirtualThreads {
 
   public static final int THREADS = 10_000;
@@ -98,4 +103,23 @@ public class VirtualThreads {
     }
   }
 
+  public void executors(){
+    try (var executor = Executors.newVirtualThreadPerTaskExecutor()) {
+      var future1 = executor.submit(() -> fetchURL(new URL("https://www.heise.de")));
+      var future2 = executor.submit(() -> fetchURL(new URL("https://www.infrontfinance.com")));
+      log.info(future2.get());
+      log.info(future1.get());
+    } catch (ExecutionException | InterruptedException e) {
+     log.info("Fail",e);
+    }
+  }
+
+  String fetchURL(URL url) throws IOException {
+    try (var in = url.openStream()) {
+      return new String(in.readAllBytes(), StandardCharsets.UTF_8);
+    }
+  }
+
 }
+
+

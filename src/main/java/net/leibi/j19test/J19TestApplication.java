@@ -23,9 +23,12 @@ public class J19TestApplication {
     Thread.sleep(1000);
 
     log.info("Total time: {}", millisecondsBetween(start, virtualthreads));
-    log.info("Runnables time: {}", millisecondsBetween(start,runnables));
+    log.info("Runnables time: {}", millisecondsBetween(start, runnables));
     log.info("Threads time: {}", millisecondsBetween(runnables, threads));
-    log.info("VThreads time: {}", millisecondsBetween(threads,virtualthreads));
+    log.info("VThreads time: {}", millisecondsBetween(threads, virtualthreads));
+
+    VirtualThreads virtualThreads = new VirtualThreads();
+    virtualThreads.executors();
   }
 
   static long millisecondsBetween(long start, long end) {
